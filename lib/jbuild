@@ -1,0 +1,7 @@
+(jbuild_version 1)
+(library
+ ((name etcd)
+  (public_name ocaml-etcd)
+  (libraries (yojson cohttp-lwt-unix) )
+    (preprocess (pps (ppx_deriving_yojson)))
+  (synopsis "An etcd client in ocaml")))

@@ -1,0 +1,23 @@
+lib: [
+  "_build/install/default/lib/ocaml-etcd/META" {"META"}
+  "_build/install/default/lib/ocaml-etcd/opam" {"opam"}
+  "_build/install/default/lib/ocaml-etcd/etcd__Client.cmi"
+  "_build/install/default/lib/ocaml-etcd/etcd__Client.cmx"
+  "_build/install/default/lib/ocaml-etcd/etcd__Client.cmt"
+  "_build/install/default/lib/ocaml-etcd/client.ml"
+  "_build/install/default/lib/ocaml-etcd/etcd.cmi"
+  "_build/install/default/lib/ocaml-etcd/etcd.cmx"
+  "_build/install/default/lib/ocaml-etcd/etcd.cmt"
+  "_build/install/default/lib/ocaml-etcd/etcd.ml-gen"
+  "_build/install/default/lib/ocaml-etcd/etcd__Protocol.cmi"
+  "_build/install/default/lib/ocaml-etcd/etcd__Protocol.cmx"
+  "_build/install/default/lib/ocaml-etcd/etcd__Protocol.cmt"
+  "_build/install/default/lib/ocaml-etcd/protocol.ml"
+  "_build/install/default/lib/ocaml-etcd/etcd.cma"
+  "_build/install/default/lib/ocaml-etcd/etcd.cmxa"
+  "_build/install/default/lib/ocaml-etcd/etcd.a"
+  "_build/install/default/lib/ocaml-etcd/etcd.cmxs"
+]
+doc: [
+  "_build/install/default/doc/ocaml-etcd/README.txt"
+]
