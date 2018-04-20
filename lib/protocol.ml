@@ -1,37 +1,1410 @@
-module Node = struct 
-  type t =
-    {
-      key: string;
-      createIndex: int;
-      modifiedIndex: int;
+(* Auto-generated from "protocol.atd" *)
 
-      expiration: string option;
-      value: string option;
-      
-      dir: bool option;
-      nodes: t list option; 
-    } [@@deriving yojson, fields]
 
+type node = {
+  key: string;
+  createIndex: int;
+  modifiedIndex: int;
+  expiration: string option;
+  value: string option;
+  dir: bool option;
+  nodes: node list option
+}
+
+type response = { action: string; node: node; prevNode: node option }
+
+type error = { errorCode: int; message: string; cause: string; index: int }
+
+let write__1 = (
+  Ag_oj_run.write_std_option (
+    Yojson.Safe.write_string
+  )
+)
+let string_of__1 ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write__1 ob x;
+  Bi_outbuf.contents ob
+let read__1 = (
+  fun p lb ->
+    Yojson.Safe.read_space p lb;
     
-end
-
-
-module Response = struct
-  type t =
-    {
-      action: string;
-      node: Node.t;
-      prevNode: Node.t option;
-    } [@@deriving yojson, fields]
-end 
-
-
-module Error = struct
-  type t =
-    {
-      errorCode: int;
-      message: string;
-      cause: string;
-      index: int 
-    } [@@deriving yojson, fields]
-end 
+    match Yojson.Safe.start_any_variant p lb with
+      | `Edgy_bracket -> (
+          Yojson.Safe.read_space p lb;
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 then (
+                  match String.unsafe_get s pos with
+                    | 'N' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'e' then (
+                          0
+                        )
+                        else (
+                          raise (Exit)
+                        )
+                      )
+                    | 'S' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' then (
+                          1
+                        )
+                        else (
+                          raise (Exit)
+                        )
+                      )
+                    | _ -> (
+                        raise (Exit)
+                      )
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_ident p f lb in
+          match i with
+            | 0 ->
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_gt p lb;
+              (None : _ option)
+            | 1 ->
+              Ag_oj_run.read_until_field_value p lb;
+              let x = (
+                  Ag_oj_run.read_string
+                ) p lb
+              in
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_gt p lb;
+              (Some x : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+      | `Double_quote -> (
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 && String.unsafe_get s pos = 'N' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'e' then (
+                  0
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_string p f lb in
+          match i with
+            | 0 ->
+              (None : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+      | `Square_bracket -> (
+          Yojson.Safe.read_space p lb;
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 && String.unsafe_get s pos = 'S' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' then (
+                  0
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_ident p f lb in
+          match i with
+            | 0 ->
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_comma p lb;
+              Yojson.Safe.read_space p lb;
+              let x = (
+                  Ag_oj_run.read_string
+                ) p lb
+              in
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_rbr p lb;
+              (Some x : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+)
+let _1_of_string s =
+  read__1 (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+let write__2 = (
+  Ag_oj_run.write_std_option (
+    Yojson.Safe.write_bool
+  )
+)
+let string_of__2 ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write__2 ob x;
+  Bi_outbuf.contents ob
+let read__2 = (
+  fun p lb ->
+    Yojson.Safe.read_space p lb;
+    
+    match Yojson.Safe.start_any_variant p lb with
+      | `Edgy_bracket -> (
+          Yojson.Safe.read_space p lb;
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 then (
+                  match String.unsafe_get s pos with
+                    | 'N' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'e' then (
+                          0
+                        )
+                        else (
+                          raise (Exit)
+                        )
+                      )
+                    | 'S' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' then (
+                          1
+                        )
+                        else (
+                          raise (Exit)
+                        )
+                      )
+                    | _ -> (
+                        raise (Exit)
+                      )
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_ident p f lb in
+          match i with
+            | 0 ->
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_gt p lb;
+              (None : _ option)
+            | 1 ->
+              Ag_oj_run.read_until_field_value p lb;
+              let x = (
+                  Ag_oj_run.read_bool
+                ) p lb
+              in
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_gt p lb;
+              (Some x : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+      | `Double_quote -> (
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 && String.unsafe_get s pos = 'N' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'e' then (
+                  0
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_string p f lb in
+          match i with
+            | 0 ->
+              (None : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+      | `Square_bracket -> (
+          Yojson.Safe.read_space p lb;
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 && String.unsafe_get s pos = 'S' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' then (
+                  0
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_ident p f lb in
+          match i with
+            | 0 ->
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_comma p lb;
+              Yojson.Safe.read_space p lb;
+              let x = (
+                  Ag_oj_run.read_bool
+                ) p lb
+              in
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_rbr p lb;
+              (Some x : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+)
+let _2_of_string s =
+  read__2 (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+let rec write__3 ob x = (
+  Ag_oj_run.write_list (
+    write_node
+  )
+) ob x
+and string_of__3 ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write__3 ob x;
+  Bi_outbuf.contents ob
+and write__4 ob x = (
+  Ag_oj_run.write_std_option (
+    write__3
+  )
+) ob x
+and string_of__4 ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write__4 ob x;
+  Bi_outbuf.contents ob
+and write_node : _ -> node -> _ = (
+  fun ob x ->
+    Bi_outbuf.add_char ob '{';
+    let is_first = ref true in
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"key\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.key;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"createIndex\":";
+    (
+      Yojson.Safe.write_int
+    )
+      ob x.createIndex;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"modifiedIndex\":";
+    (
+      Yojson.Safe.write_int
+    )
+      ob x.modifiedIndex;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"expiration\":";
+    (
+      write__1
+    )
+      ob x.expiration;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"value\":";
+    (
+      write__1
+    )
+      ob x.value;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"dir\":";
+    (
+      write__2
+    )
+      ob x.dir;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"nodes\":";
+    (
+      write__4
+    )
+      ob x.nodes;
+    Bi_outbuf.add_char ob '}';
+)
+and string_of_node ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write_node ob x;
+  Bi_outbuf.contents ob
+let rec read__3 p lb = (
+  Ag_oj_run.read_list (
+    read_node
+  )
+) p lb
+and _3_of_string s =
+  read__3 (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+and read__4 = (
+  fun p lb ->
+    Yojson.Safe.read_space p lb;
+    
+    match Yojson.Safe.start_any_variant p lb with
+      | `Edgy_bracket -> (
+          Yojson.Safe.read_space p lb;
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 then (
+                  match String.unsafe_get s pos with
+                    | 'N' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'e' then (
+                          0
+                        )
+                        else (
+                          raise (Exit)
+                        )
+                      )
+                    | 'S' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' then (
+                          1
+                        )
+                        else (
+                          raise (Exit)
+                        )
+                      )
+                    | _ -> (
+                        raise (Exit)
+                      )
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_ident p f lb in
+          match i with
+            | 0 ->
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_gt p lb;
+              (None : _ option)
+            | 1 ->
+              Ag_oj_run.read_until_field_value p lb;
+              let x = (
+                  read__3
+                ) p lb
+              in
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_gt p lb;
+              (Some x : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+      | `Double_quote -> (
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 && String.unsafe_get s pos = 'N' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'e' then (
+                  0
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_string p f lb in
+          match i with
+            | 0 ->
+              (None : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+      | `Square_bracket -> (
+          Yojson.Safe.read_space p lb;
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 && String.unsafe_get s pos = 'S' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' then (
+                  0
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_ident p f lb in
+          match i with
+            | 0 ->
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_comma p lb;
+              Yojson.Safe.read_space p lb;
+              let x = (
+                  read__3
+                ) p lb
+              in
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_rbr p lb;
+              (Some x : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+)
+and _4_of_string s =
+  read__4 (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+and read_node = (
+  fun p lb ->
+    Yojson.Safe.read_space p lb;
+    Yojson.Safe.read_lcurl p lb;
+    let field_key = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_createIndex = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_modifiedIndex = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_expiration = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_value = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_dir = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_nodes = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let bits0 = ref 0 in
+    try
+      Yojson.Safe.read_space p lb;
+      Yojson.Safe.read_object_end lb;
+      Yojson.Safe.read_space p lb;
+      let f =
+        fun s pos len ->
+          if pos < 0 || len < 0 || pos + len > String.length s then
+            invalid_arg "out-of-bounds substring position or length";
+          match len with
+            | 3 -> (
+                match String.unsafe_get s pos with
+                  | 'd' -> (
+                      if String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'r' then (
+                        5
+                      )
+                      else (
+                        -1
+                      )
+                    )
+                  | 'k' -> (
+                      if String.unsafe_get s (pos+1) = 'e' && String.unsafe_get s (pos+2) = 'y' then (
+                        0
+                      )
+                      else (
+                        -1
+                      )
+                    )
+                  | _ -> (
+                      -1
+                    )
+              )
+            | 5 -> (
+                match String.unsafe_get s pos with
+                  | 'n' -> (
+                      if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'd' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 's' then (
+                        6
+                      )
+                      else (
+                        -1
+                      )
+                    )
+                  | 'v' -> (
+                      if String.unsafe_get s (pos+1) = 'a' && String.unsafe_get s (pos+2) = 'l' && String.unsafe_get s (pos+3) = 'u' && String.unsafe_get s (pos+4) = 'e' then (
+                        4
+                      )
+                      else (
+                        -1
+                      )
+                    )
+                  | _ -> (
+                      -1
+                    )
+              )
+            | 10 -> (
+                if String.unsafe_get s pos = 'e' && String.unsafe_get s (pos+1) = 'x' && String.unsafe_get s (pos+2) = 'p' && String.unsafe_get s (pos+3) = 'i' && String.unsafe_get s (pos+4) = 'r' && String.unsafe_get s (pos+5) = 'a' && String.unsafe_get s (pos+6) = 't' && String.unsafe_get s (pos+7) = 'i' && String.unsafe_get s (pos+8) = 'o' && String.unsafe_get s (pos+9) = 'n' then (
+                  3
+                )
+                else (
+                  -1
+                )
+              )
+            | 11 -> (
+                if String.unsafe_get s pos = 'c' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'a' && String.unsafe_get s (pos+4) = 't' && String.unsafe_get s (pos+5) = 'e' && String.unsafe_get s (pos+6) = 'I' && String.unsafe_get s (pos+7) = 'n' && String.unsafe_get s (pos+8) = 'd' && String.unsafe_get s (pos+9) = 'e' && String.unsafe_get s (pos+10) = 'x' then (
+                  1
+                )
+                else (
+                  -1
+                )
+              )
+            | 13 -> (
+                if String.unsafe_get s pos = 'm' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'd' && String.unsafe_get s (pos+3) = 'i' && String.unsafe_get s (pos+4) = 'f' && String.unsafe_get s (pos+5) = 'i' && String.unsafe_get s (pos+6) = 'e' && String.unsafe_get s (pos+7) = 'd' && String.unsafe_get s (pos+8) = 'I' && String.unsafe_get s (pos+9) = 'n' && String.unsafe_get s (pos+10) = 'd' && String.unsafe_get s (pos+11) = 'e' && String.unsafe_get s (pos+12) = 'x' then (
+                  2
+                )
+                else (
+                  -1
+                )
+              )
+            | _ -> (
+                -1
+              )
+      in
+      let i = Yojson.Safe.map_ident p f lb in
+      Ag_oj_run.read_until_field_value p lb;
+      (
+        match i with
+          | 0 ->
+            field_key := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x1;
+          | 1 ->
+            field_createIndex := (
+              (
+                Ag_oj_run.read_int
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x2;
+          | 2 ->
+            field_modifiedIndex := (
+              (
+                Ag_oj_run.read_int
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x4;
+          | 3 ->
+            field_expiration := (
+              (
+                read__1
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x8;
+          | 4 ->
+            field_value := (
+              (
+                read__1
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x10;
+          | 5 ->
+            field_dir := (
+              (
+                read__2
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x20;
+          | 6 ->
+            field_nodes := (
+              (
+                read__4
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x40;
+          | _ -> (
+              Yojson.Safe.skip_json p lb
+            )
+      );
+      while true do
+        Yojson.Safe.read_space p lb;
+        Yojson.Safe.read_object_sep p lb;
+        Yojson.Safe.read_space p lb;
+        let f =
+          fun s pos len ->
+            if pos < 0 || len < 0 || pos + len > String.length s then
+              invalid_arg "out-of-bounds substring position or length";
+            match len with
+              | 3 -> (
+                  match String.unsafe_get s pos with
+                    | 'd' -> (
+                        if String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'r' then (
+                          5
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | 'k' -> (
+                        if String.unsafe_get s (pos+1) = 'e' && String.unsafe_get s (pos+2) = 'y' then (
+                          0
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | _ -> (
+                        -1
+                      )
+                )
+              | 5 -> (
+                  match String.unsafe_get s pos with
+                    | 'n' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'd' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 's' then (
+                          6
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | 'v' -> (
+                        if String.unsafe_get s (pos+1) = 'a' && String.unsafe_get s (pos+2) = 'l' && String.unsafe_get s (pos+3) = 'u' && String.unsafe_get s (pos+4) = 'e' then (
+                          4
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | _ -> (
+                        -1
+                      )
+                )
+              | 10 -> (
+                  if String.unsafe_get s pos = 'e' && String.unsafe_get s (pos+1) = 'x' && String.unsafe_get s (pos+2) = 'p' && String.unsafe_get s (pos+3) = 'i' && String.unsafe_get s (pos+4) = 'r' && String.unsafe_get s (pos+5) = 'a' && String.unsafe_get s (pos+6) = 't' && String.unsafe_get s (pos+7) = 'i' && String.unsafe_get s (pos+8) = 'o' && String.unsafe_get s (pos+9) = 'n' then (
+                    3
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 11 -> (
+                  if String.unsafe_get s pos = 'c' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'a' && String.unsafe_get s (pos+4) = 't' && String.unsafe_get s (pos+5) = 'e' && String.unsafe_get s (pos+6) = 'I' && String.unsafe_get s (pos+7) = 'n' && String.unsafe_get s (pos+8) = 'd' && String.unsafe_get s (pos+9) = 'e' && String.unsafe_get s (pos+10) = 'x' then (
+                    1
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 13 -> (
+                  if String.unsafe_get s pos = 'm' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'd' && String.unsafe_get s (pos+3) = 'i' && String.unsafe_get s (pos+4) = 'f' && String.unsafe_get s (pos+5) = 'i' && String.unsafe_get s (pos+6) = 'e' && String.unsafe_get s (pos+7) = 'd' && String.unsafe_get s (pos+8) = 'I' && String.unsafe_get s (pos+9) = 'n' && String.unsafe_get s (pos+10) = 'd' && String.unsafe_get s (pos+11) = 'e' && String.unsafe_get s (pos+12) = 'x' then (
+                    2
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | _ -> (
+                  -1
+                )
+        in
+        let i = Yojson.Safe.map_ident p f lb in
+        Ag_oj_run.read_until_field_value p lb;
+        (
+          match i with
+            | 0 ->
+              field_key := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x1;
+            | 1 ->
+              field_createIndex := (
+                (
+                  Ag_oj_run.read_int
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x2;
+            | 2 ->
+              field_modifiedIndex := (
+                (
+                  Ag_oj_run.read_int
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x4;
+            | 3 ->
+              field_expiration := (
+                (
+                  read__1
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x8;
+            | 4 ->
+              field_value := (
+                (
+                  read__1
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x10;
+            | 5 ->
+              field_dir := (
+                (
+                  read__2
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x20;
+            | 6 ->
+              field_nodes := (
+                (
+                  read__4
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x40;
+            | _ -> (
+                Yojson.Safe.skip_json p lb
+              )
+        );
+      done;
+      assert false;
+    with Yojson.End_of_object -> (
+        if !bits0 <> 0x7f then Ag_oj_run.missing_fields p [| !bits0 |] [| "key"; "createIndex"; "modifiedIndex"; "expiration"; "value"; "dir"; "nodes" |];
+        (
+          {
+            key = !field_key;
+            createIndex = !field_createIndex;
+            modifiedIndex = !field_modifiedIndex;
+            expiration = !field_expiration;
+            value = !field_value;
+            dir = !field_dir;
+            nodes = !field_nodes;
+          }
+         : node)
+      )
+)
+and node_of_string s =
+  read_node (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+let write__5 = (
+  Ag_oj_run.write_std_option (
+    write_node
+  )
+)
+let string_of__5 ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write__5 ob x;
+  Bi_outbuf.contents ob
+let read__5 = (
+  fun p lb ->
+    Yojson.Safe.read_space p lb;
+    
+    match Yojson.Safe.start_any_variant p lb with
+      | `Edgy_bracket -> (
+          Yojson.Safe.read_space p lb;
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 then (
+                  match String.unsafe_get s pos with
+                    | 'N' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'e' then (
+                          0
+                        )
+                        else (
+                          raise (Exit)
+                        )
+                      )
+                    | 'S' -> (
+                        if String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' then (
+                          1
+                        )
+                        else (
+                          raise (Exit)
+                        )
+                      )
+                    | _ -> (
+                        raise (Exit)
+                      )
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_ident p f lb in
+          match i with
+            | 0 ->
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_gt p lb;
+              (None : _ option)
+            | 1 ->
+              Ag_oj_run.read_until_field_value p lb;
+              let x = (
+                  read_node
+                ) p lb
+              in
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_gt p lb;
+              (Some x : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+      | `Double_quote -> (
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 && String.unsafe_get s pos = 'N' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'e' then (
+                  0
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_string p f lb in
+          match i with
+            | 0 ->
+              (None : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+      | `Square_bracket -> (
+          Yojson.Safe.read_space p lb;
+          let f =
+            fun s pos len ->
+              if pos < 0 || len < 0 || pos + len > String.length s then
+                invalid_arg "out-of-bounds substring position or length";
+              try
+                if len = 4 && String.unsafe_get s pos = 'S' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' then (
+                  0
+                )
+                else (
+                  raise (Exit)
+                )
+              with Exit -> (
+                  Ag_oj_run.invalid_variant_tag p (String.sub s pos len)
+                )
+          in
+          let i = Yojson.Safe.map_ident p f lb in
+          match i with
+            | 0 ->
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_comma p lb;
+              Yojson.Safe.read_space p lb;
+              let x = (
+                  read_node
+                ) p lb
+              in
+              Yojson.Safe.read_space p lb;
+              Yojson.Safe.read_rbr p lb;
+              (Some x : _ option)
+            | _ -> (
+                assert false
+              )
+        )
+)
+let _5_of_string s =
+  read__5 (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+let write_response : _ -> response -> _ = (
+  fun ob x ->
+    Bi_outbuf.add_char ob '{';
+    let is_first = ref true in
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"action\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.action;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"node\":";
+    (
+      write_node
+    )
+      ob x.node;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"prevNode\":";
+    (
+      write__5
+    )
+      ob x.prevNode;
+    Bi_outbuf.add_char ob '}';
+)
+let string_of_response ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write_response ob x;
+  Bi_outbuf.contents ob
+let read_response = (
+  fun p lb ->
+    Yojson.Safe.read_space p lb;
+    Yojson.Safe.read_lcurl p lb;
+    let field_action = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_node = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_prevNode = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let bits0 = ref 0 in
+    try
+      Yojson.Safe.read_space p lb;
+      Yojson.Safe.read_object_end lb;
+      Yojson.Safe.read_space p lb;
+      let f =
+        fun s pos len ->
+          if pos < 0 || len < 0 || pos + len > String.length s then
+            invalid_arg "out-of-bounds substring position or length";
+          match len with
+            | 4 -> (
+                if String.unsafe_get s pos = 'n' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'd' && String.unsafe_get s (pos+3) = 'e' then (
+                  1
+                )
+                else (
+                  -1
+                )
+              )
+            | 6 -> (
+                if String.unsafe_get s pos = 'a' && String.unsafe_get s (pos+1) = 'c' && String.unsafe_get s (pos+2) = 't' && String.unsafe_get s (pos+3) = 'i' && String.unsafe_get s (pos+4) = 'o' && String.unsafe_get s (pos+5) = 'n' then (
+                  0
+                )
+                else (
+                  -1
+                )
+              )
+            | 8 -> (
+                if String.unsafe_get s pos = 'p' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'v' && String.unsafe_get s (pos+4) = 'N' && String.unsafe_get s (pos+5) = 'o' && String.unsafe_get s (pos+6) = 'd' && String.unsafe_get s (pos+7) = 'e' then (
+                  2
+                )
+                else (
+                  -1
+                )
+              )
+            | _ -> (
+                -1
+              )
+      in
+      let i = Yojson.Safe.map_ident p f lb in
+      Ag_oj_run.read_until_field_value p lb;
+      (
+        match i with
+          | 0 ->
+            field_action := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x1;
+          | 1 ->
+            field_node := (
+              (
+                read_node
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x2;
+          | 2 ->
+            field_prevNode := (
+              (
+                read__5
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x4;
+          | _ -> (
+              Yojson.Safe.skip_json p lb
+            )
+      );
+      while true do
+        Yojson.Safe.read_space p lb;
+        Yojson.Safe.read_object_sep p lb;
+        Yojson.Safe.read_space p lb;
+        let f =
+          fun s pos len ->
+            if pos < 0 || len < 0 || pos + len > String.length s then
+              invalid_arg "out-of-bounds substring position or length";
+            match len with
+              | 4 -> (
+                  if String.unsafe_get s pos = 'n' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'd' && String.unsafe_get s (pos+3) = 'e' then (
+                    1
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 6 -> (
+                  if String.unsafe_get s pos = 'a' && String.unsafe_get s (pos+1) = 'c' && String.unsafe_get s (pos+2) = 't' && String.unsafe_get s (pos+3) = 'i' && String.unsafe_get s (pos+4) = 'o' && String.unsafe_get s (pos+5) = 'n' then (
+                    0
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 8 -> (
+                  if String.unsafe_get s pos = 'p' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'v' && String.unsafe_get s (pos+4) = 'N' && String.unsafe_get s (pos+5) = 'o' && String.unsafe_get s (pos+6) = 'd' && String.unsafe_get s (pos+7) = 'e' then (
+                    2
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | _ -> (
+                  -1
+                )
+        in
+        let i = Yojson.Safe.map_ident p f lb in
+        Ag_oj_run.read_until_field_value p lb;
+        (
+          match i with
+            | 0 ->
+              field_action := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x1;
+            | 1 ->
+              field_node := (
+                (
+                  read_node
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x2;
+            | 2 ->
+              field_prevNode := (
+                (
+                  read__5
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x4;
+            | _ -> (
+                Yojson.Safe.skip_json p lb
+              )
+        );
+      done;
+      assert false;
+    with Yojson.End_of_object -> (
+        if !bits0 <> 0x7 then Ag_oj_run.missing_fields p [| !bits0 |] [| "action"; "node"; "prevNode" |];
+        (
+          {
+            action = !field_action;
+            node = !field_node;
+            prevNode = !field_prevNode;
+          }
+         : response)
+      )
+)
+let response_of_string s =
+  read_response (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+let write_error : _ -> error -> _ = (
+  fun ob x ->
+    Bi_outbuf.add_char ob '{';
+    let is_first = ref true in
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"errorCode\":";
+    (
+      Yojson.Safe.write_int
+    )
+      ob x.errorCode;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"message\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.message;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"cause\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.cause;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"index\":";
+    (
+      Yojson.Safe.write_int
+    )
+      ob x.index;
+    Bi_outbuf.add_char ob '}';
+)
+let string_of_error ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write_error ob x;
+  Bi_outbuf.contents ob
+let read_error = (
+  fun p lb ->
+    Yojson.Safe.read_space p lb;
+    Yojson.Safe.read_lcurl p lb;
+    let field_errorCode = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_message = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_cause = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_index = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let bits0 = ref 0 in
+    try
+      Yojson.Safe.read_space p lb;
+      Yojson.Safe.read_object_end lb;
+      Yojson.Safe.read_space p lb;
+      let f =
+        fun s pos len ->
+          if pos < 0 || len < 0 || pos + len > String.length s then
+            invalid_arg "out-of-bounds substring position or length";
+          match len with
+            | 5 -> (
+                match String.unsafe_get s pos with
+                  | 'c' -> (
+                      if String.unsafe_get s (pos+1) = 'a' && String.unsafe_get s (pos+2) = 'u' && String.unsafe_get s (pos+3) = 's' && String.unsafe_get s (pos+4) = 'e' then (
+                        2
+                      )
+                      else (
+                        -1
+                      )
+                    )
+                  | 'i' -> (
+                      if String.unsafe_get s (pos+1) = 'n' && String.unsafe_get s (pos+2) = 'd' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 'x' then (
+                        3
+                      )
+                      else (
+                        -1
+                      )
+                    )
+                  | _ -> (
+                      -1
+                    )
+              )
+            | 7 -> (
+                if String.unsafe_get s pos = 'm' && String.unsafe_get s (pos+1) = 'e' && String.unsafe_get s (pos+2) = 's' && String.unsafe_get s (pos+3) = 's' && String.unsafe_get s (pos+4) = 'a' && String.unsafe_get s (pos+5) = 'g' && String.unsafe_get s (pos+6) = 'e' then (
+                  1
+                )
+                else (
+                  -1
+                )
+              )
+            | 9 -> (
+                if String.unsafe_get s pos = 'e' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'r' && String.unsafe_get s (pos+3) = 'o' && String.unsafe_get s (pos+4) = 'r' && String.unsafe_get s (pos+5) = 'C' && String.unsafe_get s (pos+6) = 'o' && String.unsafe_get s (pos+7) = 'd' && String.unsafe_get s (pos+8) = 'e' then (
+                  0
+                )
+                else (
+                  -1
+                )
+              )
+            | _ -> (
+                -1
+              )
+      in
+      let i = Yojson.Safe.map_ident p f lb in
+      Ag_oj_run.read_until_field_value p lb;
+      (
+        match i with
+          | 0 ->
+            field_errorCode := (
+              (
+                Ag_oj_run.read_int
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x1;
+          | 1 ->
+            field_message := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x2;
+          | 2 ->
+            field_cause := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x4;
+          | 3 ->
+            field_index := (
+              (
+                Ag_oj_run.read_int
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x8;
+          | _ -> (
+              Yojson.Safe.skip_json p lb
+            )
+      );
+      while true do
+        Yojson.Safe.read_space p lb;
+        Yojson.Safe.read_object_sep p lb;
+        Yojson.Safe.read_space p lb;
+        let f =
+          fun s pos len ->
+            if pos < 0 || len < 0 || pos + len > String.length s then
+              invalid_arg "out-of-bounds substring position or length";
+            match len with
+              | 5 -> (
+                  match String.unsafe_get s pos with
+                    | 'c' -> (
+                        if String.unsafe_get s (pos+1) = 'a' && String.unsafe_get s (pos+2) = 'u' && String.unsafe_get s (pos+3) = 's' && String.unsafe_get s (pos+4) = 'e' then (
+                          2
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | 'i' -> (
+                        if String.unsafe_get s (pos+1) = 'n' && String.unsafe_get s (pos+2) = 'd' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 'x' then (
+                          3
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | _ -> (
+                        -1
+                      )
+                )
+              | 7 -> (
+                  if String.unsafe_get s pos = 'm' && String.unsafe_get s (pos+1) = 'e' && String.unsafe_get s (pos+2) = 's' && String.unsafe_get s (pos+3) = 's' && String.unsafe_get s (pos+4) = 'a' && String.unsafe_get s (pos+5) = 'g' && String.unsafe_get s (pos+6) = 'e' then (
+                    1
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 9 -> (
+                  if String.unsafe_get s pos = 'e' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'r' && String.unsafe_get s (pos+3) = 'o' && String.unsafe_get s (pos+4) = 'r' && String.unsafe_get s (pos+5) = 'C' && String.unsafe_get s (pos+6) = 'o' && String.unsafe_get s (pos+7) = 'd' && String.unsafe_get s (pos+8) = 'e' then (
+                    0
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | _ -> (
+                  -1
+                )
+        in
+        let i = Yojson.Safe.map_ident p f lb in
+        Ag_oj_run.read_until_field_value p lb;
+        (
+          match i with
+            | 0 ->
+              field_errorCode := (
+                (
+                  Ag_oj_run.read_int
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x1;
+            | 1 ->
+              field_message := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x2;
+            | 2 ->
+              field_cause := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x4;
+            | 3 ->
+              field_index := (
+                (
+                  Ag_oj_run.read_int
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x8;
+            | _ -> (
+                Yojson.Safe.skip_json p lb
+              )
+        );
+      done;
+      assert false;
+    with Yojson.End_of_object -> (
+        if !bits0 <> 0xf then Ag_oj_run.missing_fields p [| !bits0 |] [| "errorCode"; "message"; "cause"; "index" |];
+        (
+          {
+            errorCode = !field_errorCode;
+            message = !field_message;
+            cause = !field_cause;
+            index = !field_index;
+          }
+         : error)
+      )
+)
+let error_of_string s =
+  read_error (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+let create_node 
+  ~key
+  ~createIndex
+  ~modifiedIndex
+  ~expiration
+  ~value
+  ~dir
+  ~nodes
+  () : node =
+  {
+    key = key;
+    createIndex = createIndex;
+    modifiedIndex = modifiedIndex;
+    expiration = expiration;
+    value = value;
+    dir = dir;
+    nodes = nodes;
+  }
+let create_response 
+  ~action
+  ~node
+  ~prevNode
+  () : response =
+  {
+    action = action;
+    node = node;
+    prevNode = prevNode;
+  }
+let create_error 
+  ~errorCode
+  ~message
+  ~cause
+  ~index
+  () : error =
+  {
+    errorCode = errorCode;
+    message = message;
+    cause = cause;
+    index = index;
+  }

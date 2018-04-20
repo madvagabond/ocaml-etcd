@@ -1,12 +1,14 @@
 B ../_build/default/lib
 FLG -open Etcd -w -40
-FLG -ppx '/home/sam/Programming/servers/ocaml-etcd/_build/default/.ppx/ppx_deriving_yojson/ppx.exe --as-ppx --cookie '\''library-name="etcd"'\'''
 PKG asn1-combinators
 PKG astring
+PKG atd
+PKG atdgen
 PKG base
 PKG base.caml
 PKG base.shadow_stdlib
 PKG base64
+PKG batteries
 PKG bigarray
 PKG biniou
 PKG bytes
@@ -34,6 +36,8 @@ PKG magic-mime
 PKG nocrypto
 PKG nocrypto.lwt
 PKG nocrypto.unix
+PKG num
+PKG num.core
 PKG ptime
 PKG ptime.clock.os
 PKG re
@@ -43,6 +47,7 @@ PKG result
 PKG sexplib
 PKG sexplib.0
 PKG ssl
+PKG str
 PKG stringext
 PKG threads
 PKG threads.posix

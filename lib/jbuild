@@ -2,6 +2,5 @@
 (library
  ((name etcd)
   (public_name ocaml-etcd)
-  (libraries (yojson cohttp-lwt-unix) )
-    (preprocess (pps (ppx_deriving_yojson)))
+  (libraries (yojson cohttp-lwt-unix batteries atdgen) )
   (synopsis "An etcd client in ocaml")))
