@@ -1,0 +1,12 @@
+type node =
+  {
+    key: string;
+    createIndex: int;
+    modifiedIndex: int;
+
+    expiration: string option;
+    value: string option;
+    
+    dir: bool option;
+    nodes: list node option; 
+  } [@@deriving yojson ]

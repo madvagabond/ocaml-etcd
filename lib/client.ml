@@ -16,16 +16,24 @@ let path_string path =
   String.concat "/" path
 
 let make_path key =
-  ["v2";"keys"] @ key
-  |> path_string
+  let base = "/v2/keys" in
+  let kp = path_string key in
+  Fmt.strf "%s/%s" base kp
+           
 
+let make_uri host key =
+  let path = make_path key in 
+  Uri.of_string (host ^ path)
        
+       
+           
 let ttl_param ttl =
   match ttl with
   | Some x ->
      [( "ttl", [(string_of_int x)] )  ]
 
   | _ -> []
+
 
 
 let decode_response body =
@@ -35,25 +43,50 @@ let decode_response body =
     Result.Ok x |> Lwt.return 
   in
 
-  Lwt.catch (fun () -> f ()) (fun exn ->
-      Result.Error(error_of_string s )
-      |> Lwt.return
-           
-    )
-            
+  Lwt.catch (fun () -> f ()) (fun _ -> Result.Error (error_of_string s) |> Lwt.return )
+
+
+
+let follow_redirect f uri =
+  f uri >>= fun (rep, body) ->
+
+  let is_redir =
+    rep
+    |> Cohttp.Response.status
+    |> Cohttp.Code.code_of_status
+    |> Cohttp.Code.is_redirection
+  in
+
+  if is_redir then
+    
+    let h = Cohttp.Response.headers rep in 
+    let loc =  Cohttp.Header.get h "location"  in
+    
+    match loc with
+    | Some u ->
+       print_endline "redirecting";
+       let nuri = Uri.of_string u |> Uri.resolve "http" uri in
+       f uri 
+    | None -> Lwt.fail_with "Couldn't follow redirect"
+
+  else
+    
+    Lwt.return (rep, body)
+               
 
             
 let put host key ?ttl v =
 
-  let path = make_path key in 
-  let uri = Uri.make ~host ~path () in
+  let uri = make_uri host key in 
   let value = Uri.pct_encode v in
 
-  let ttl_p = ttl_param ttl in 
+  let ttl_p = ttl_param ttl in
+  print_endline "is putting";
   
   let params = [("value", [value])] @ ttl_p in
 
-  Client.post_form ~params uri >>= fun (_, body) ->
+  let f u = Client.post_form ~params u in
+  follow_redirect f uri >>= fun (_, body) ->
   decode_response body
 
 
@@ -67,16 +100,22 @@ let get host key =
                   
 
 let delete host key =
-  let path = make_path key in
-  let uri = Uri.make ~host ~path ()  in
-  Client.delete uri >>= fun (_, body) ->
+  let base = make_uri host key in
+  let params = [("dir", ["true"]); ("recursive", ["true"])] in
+  let uri = Uri.with_query base params in
+  
+  let f u = Client.delete u in
+  
+  follow_redirect f uri >>= fun (_, body) ->
   decode_response body
 
 
+               
                   
 let create_dir host key ?ttl () =
-  let path = make_path key in 
-  let uri = Uri.make ~host ~path () in
+  let path = make_path key in
+  let uri = make_uri host key in
+  print_endline (Uri.to_string uri);
 
   let ttl_p = ttl_param ttl in
   let params =
@@ -85,7 +124,9 @@ let create_dir host key ?ttl () =
     ] @ ttl_p
   in
 
-  Client.post_form uri ~params >>= fun (_, body) ->
+  let f url = Client.post_form url ~params in
+  
+  follow_redirect f uri >>= fun (_, body) ->
   decode_response body
 
 
@@ -113,12 +154,12 @@ let refresh host key ~ttl () =
 
 
 let list host key ?r:(r=false) () =
-  let path = make_path key in
+  let base = make_uri host key in  
   let query =
     [ ("recursive", [ (string_of_bool r) ] ) ]
   in
 
-  let uri = Uri.make ~host ~path ~query () in
+  let uri = Uri.with_query base query in
 
   Client.get uri >>= fun (_, body) ->
   decode_response body 
@@ -126,9 +167,9 @@ let list host key ?r:(r=false) () =
   
 
 let rm_dir host key =
-  let path = make_path key in
+  let base = make_uri host key in
   let query = [("dir", ["true"])] in
-  let uri = Uri.make ~host ~path ~query () in
+  let uri = Uri.with_query base query in
 
   Client.delete uri >>= fun (_, body) ->
   decode_response body
@@ -139,7 +180,7 @@ let rm_dir host key =
 let watch host key cb ?times:(ct = 1) () =
 
   let make_uri i () = 
-    let path = make_path key in
+    let base = make_uri host key in
     let common_q = [  ("wait", ["true"])  ] in  
 
     let query =
@@ -156,7 +197,7 @@ let watch host key cb ?times:(ct = 1) () =
     in 
 
 
-    Uri.make ~host ~path ~query ()
+    Uri.with_query base query
 
   in
 

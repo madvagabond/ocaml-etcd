@@ -3,7 +3,7 @@
 
 type node = {
   key: string;
-  createIndex: int;
+  createdIndex: int;
   modifiedIndex: int;
   expiration: string option;
   value: string option;
@@ -310,11 +310,11 @@ and write_node : _ -> node -> _ = (
       is_first := false
     else
       Bi_outbuf.add_char ob ',';
-    Bi_outbuf.add_string ob "\"createIndex\":";
+    Bi_outbuf.add_string ob "\"createdIndex\":";
     (
       Yojson.Safe.write_int
     )
-      ob x.createIndex;
+      ob x.createdIndex;
     if !is_first then
       is_first := false
     else
@@ -324,42 +324,50 @@ and write_node : _ -> node -> _ = (
       Yojson.Safe.write_int
     )
       ob x.modifiedIndex;
-    if !is_first then
-      is_first := false
-    else
-      Bi_outbuf.add_char ob ',';
-    Bi_outbuf.add_string ob "\"expiration\":";
-    (
-      write__1
-    )
-      ob x.expiration;
-    if !is_first then
-      is_first := false
-    else
-      Bi_outbuf.add_char ob ',';
-    Bi_outbuf.add_string ob "\"value\":";
-    (
-      write__1
-    )
-      ob x.value;
-    if !is_first then
-      is_first := false
-    else
-      Bi_outbuf.add_char ob ',';
-    Bi_outbuf.add_string ob "\"dir\":";
-    (
-      write__2
-    )
-      ob x.dir;
-    if !is_first then
-      is_first := false
-    else
-      Bi_outbuf.add_char ob ',';
-    Bi_outbuf.add_string ob "\"nodes\":";
-    (
-      write__4
-    )
-      ob x.nodes;
+    (match x.expiration with None -> () | Some x ->
+      if !is_first then
+        is_first := false
+      else
+        Bi_outbuf.add_char ob ',';
+      Bi_outbuf.add_string ob "\"expiration\":";
+      (
+        Yojson.Safe.write_string
+      )
+        ob x;
+    );
+    (match x.value with None -> () | Some x ->
+      if !is_first then
+        is_first := false
+      else
+        Bi_outbuf.add_char ob ',';
+      Bi_outbuf.add_string ob "\"value\":";
+      (
+        Yojson.Safe.write_string
+      )
+        ob x;
+    );
+    (match x.dir with None -> () | Some x ->
+      if !is_first then
+        is_first := false
+      else
+        Bi_outbuf.add_char ob ',';
+      Bi_outbuf.add_string ob "\"dir\":";
+      (
+        Yojson.Safe.write_bool
+      )
+        ob x;
+    );
+    (match x.nodes with None -> () | Some x ->
+      if !is_first then
+        is_first := false
+      else
+        Bi_outbuf.add_char ob ',';
+      Bi_outbuf.add_string ob "\"nodes\":";
+      (
+        write__3
+      )
+        ob x;
+    );
     Bi_outbuf.add_char ob '}';
 )
 and string_of_node ?(len = 1024) x =
@@ -499,12 +507,12 @@ and read_node = (
     Yojson.Safe.read_space p lb;
     Yojson.Safe.read_lcurl p lb;
     let field_key = ref (Obj.magic (Sys.opaque_identity 0.0)) in
-    let field_createIndex = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_createdIndex = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_modifiedIndex = ref (Obj.magic (Sys.opaque_identity 0.0)) in
-    let field_expiration = ref (Obj.magic (Sys.opaque_identity 0.0)) in
-    let field_value = ref (Obj.magic (Sys.opaque_identity 0.0)) in
-    let field_dir = ref (Obj.magic (Sys.opaque_identity 0.0)) in
-    let field_nodes = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_expiration = ref (None) in
+    let field_value = ref (None) in
+    let field_dir = ref (None) in
+    let field_nodes = ref (None) in
     let bits0 = ref 0 in
     try
       Yojson.Safe.read_space p lb;
@@ -567,8 +575,8 @@ and read_node = (
                   -1
                 )
               )
-            | 11 -> (
-                if String.unsafe_get s pos = 'c' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'a' && String.unsafe_get s (pos+4) = 't' && String.unsafe_get s (pos+5) = 'e' && String.unsafe_get s (pos+6) = 'I' && String.unsafe_get s (pos+7) = 'n' && String.unsafe_get s (pos+8) = 'd' && String.unsafe_get s (pos+9) = 'e' && String.unsafe_get s (pos+10) = 'x' then (
+            | 12 -> (
+                if String.unsafe_get s pos = 'c' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'a' && String.unsafe_get s (pos+4) = 't' && String.unsafe_get s (pos+5) = 'e' && String.unsafe_get s (pos+6) = 'd' && String.unsafe_get s (pos+7) = 'I' && String.unsafe_get s (pos+8) = 'n' && String.unsafe_get s (pos+9) = 'd' && String.unsafe_get s (pos+10) = 'e' && String.unsafe_get s (pos+11) = 'x' then (
                   1
                 )
                 else (
@@ -599,7 +607,7 @@ and read_node = (
             );
             bits0 := !bits0 lor 0x1;
           | 1 ->
-            field_createIndex := (
+            field_createdIndex := (
               (
                 Ag_oj_run.read_int
               ) p lb
@@ -613,33 +621,45 @@ and read_node = (
             );
             bits0 := !bits0 lor 0x4;
           | 3 ->
-            field_expiration := (
-              (
-                read__1
-              ) p lb
-            );
-            bits0 := !bits0 lor 0x8;
+            if not (Yojson.Safe.read_null_if_possible p lb) then (
+              field_expiration := (
+                Some (
+                  (
+                    Ag_oj_run.read_string
+                  ) p lb
+                )
+              );
+            )
           | 4 ->
-            field_value := (
-              (
-                read__1
-              ) p lb
-            );
-            bits0 := !bits0 lor 0x10;
+            if not (Yojson.Safe.read_null_if_possible p lb) then (
+              field_value := (
+                Some (
+                  (
+                    Ag_oj_run.read_string
+                  ) p lb
+                )
+              );
+            )
           | 5 ->
-            field_dir := (
-              (
-                read__2
-              ) p lb
-            );
-            bits0 := !bits0 lor 0x20;
+            if not (Yojson.Safe.read_null_if_possible p lb) then (
+              field_dir := (
+                Some (
+                  (
+                    Ag_oj_run.read_bool
+                  ) p lb
+                )
+              );
+            )
           | 6 ->
-            field_nodes := (
-              (
-                read__4
-              ) p lb
-            );
-            bits0 := !bits0 lor 0x40;
+            if not (Yojson.Safe.read_null_if_possible p lb) then (
+              field_nodes := (
+                Some (
+                  (
+                    read__3
+                  ) p lb
+                )
+              );
+            )
           | _ -> (
               Yojson.Safe.skip_json p lb
             )
@@ -705,8 +725,8 @@ and read_node = (
                     -1
                   )
                 )
-              | 11 -> (
-                  if String.unsafe_get s pos = 'c' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'a' && String.unsafe_get s (pos+4) = 't' && String.unsafe_get s (pos+5) = 'e' && String.unsafe_get s (pos+6) = 'I' && String.unsafe_get s (pos+7) = 'n' && String.unsafe_get s (pos+8) = 'd' && String.unsafe_get s (pos+9) = 'e' && String.unsafe_get s (pos+10) = 'x' then (
+              | 12 -> (
+                  if String.unsafe_get s pos = 'c' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'a' && String.unsafe_get s (pos+4) = 't' && String.unsafe_get s (pos+5) = 'e' && String.unsafe_get s (pos+6) = 'd' && String.unsafe_get s (pos+7) = 'I' && String.unsafe_get s (pos+8) = 'n' && String.unsafe_get s (pos+9) = 'd' && String.unsafe_get s (pos+10) = 'e' && String.unsafe_get s (pos+11) = 'x' then (
                     1
                   )
                   else (
@@ -737,7 +757,7 @@ and read_node = (
               );
               bits0 := !bits0 lor 0x1;
             | 1 ->
-              field_createIndex := (
+              field_createdIndex := (
                 (
                   Ag_oj_run.read_int
                 ) p lb
@@ -751,33 +771,45 @@ and read_node = (
               );
               bits0 := !bits0 lor 0x4;
             | 3 ->
-              field_expiration := (
-                (
-                  read__1
-                ) p lb
-              );
-              bits0 := !bits0 lor 0x8;
+              if not (Yojson.Safe.read_null_if_possible p lb) then (
+                field_expiration := (
+                  Some (
+                    (
+                      Ag_oj_run.read_string
+                    ) p lb
+                  )
+                );
+              )
             | 4 ->
-              field_value := (
-                (
-                  read__1
-                ) p lb
-              );
-              bits0 := !bits0 lor 0x10;
+              if not (Yojson.Safe.read_null_if_possible p lb) then (
+                field_value := (
+                  Some (
+                    (
+                      Ag_oj_run.read_string
+                    ) p lb
+                  )
+                );
+              )
             | 5 ->
-              field_dir := (
-                (
-                  read__2
-                ) p lb
-              );
-              bits0 := !bits0 lor 0x20;
+              if not (Yojson.Safe.read_null_if_possible p lb) then (
+                field_dir := (
+                  Some (
+                    (
+                      Ag_oj_run.read_bool
+                    ) p lb
+                  )
+                );
+              )
             | 6 ->
-              field_nodes := (
-                (
-                  read__4
-                ) p lb
-              );
-              bits0 := !bits0 lor 0x40;
+              if not (Yojson.Safe.read_null_if_possible p lb) then (
+                field_nodes := (
+                  Some (
+                    (
+                      read__3
+                    ) p lb
+                  )
+                );
+              )
             | _ -> (
                 Yojson.Safe.skip_json p lb
               )
@@ -785,11 +817,11 @@ and read_node = (
       done;
       assert false;
     with Yojson.End_of_object -> (
-        if !bits0 <> 0x7f then Ag_oj_run.missing_fields p [| !bits0 |] [| "key"; "createIndex"; "modifiedIndex"; "expiration"; "value"; "dir"; "nodes" |];
+        if !bits0 <> 0x7 then Ag_oj_run.missing_fields p [| !bits0 |] [| "key"; "createdIndex"; "modifiedIndex" |];
         (
           {
             key = !field_key;
-            createIndex = !field_createIndex;
+            createdIndex = !field_createdIndex;
             modifiedIndex = !field_modifiedIndex;
             expiration = !field_expiration;
             value = !field_value;
@@ -953,15 +985,17 @@ let write_response : _ -> response -> _ = (
       write_node
     )
       ob x.node;
-    if !is_first then
-      is_first := false
-    else
-      Bi_outbuf.add_char ob ',';
-    Bi_outbuf.add_string ob "\"prevNode\":";
-    (
-      write__5
-    )
-      ob x.prevNode;
+    (match x.prevNode with None -> () | Some x ->
+      if !is_first then
+        is_first := false
+      else
+        Bi_outbuf.add_char ob ',';
+      Bi_outbuf.add_string ob "\"prevNode\":";
+      (
+        write_node
+      )
+        ob x;
+    );
     Bi_outbuf.add_char ob '}';
 )
 let string_of_response ?(len = 1024) x =
@@ -974,7 +1008,7 @@ let read_response = (
     Yojson.Safe.read_lcurl p lb;
     let field_action = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_node = ref (Obj.magic (Sys.opaque_identity 0.0)) in
-    let field_prevNode = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_prevNode = ref (None) in
     let bits0 = ref 0 in
     try
       Yojson.Safe.read_space p lb;
@@ -1032,12 +1066,15 @@ let read_response = (
             );
             bits0 := !bits0 lor 0x2;
           | 2 ->
-            field_prevNode := (
-              (
-                read__5
-              ) p lb
-            );
-            bits0 := !bits0 lor 0x4;
+            if not (Yojson.Safe.read_null_if_possible p lb) then (
+              field_prevNode := (
+                Some (
+                  (
+                    read_node
+                  ) p lb
+                )
+              );
+            )
           | _ -> (
               Yojson.Safe.skip_json p lb
             )
@@ -1098,12 +1135,15 @@ let read_response = (
               );
               bits0 := !bits0 lor 0x2;
             | 2 ->
-              field_prevNode := (
-                (
-                  read__5
-                ) p lb
-              );
-              bits0 := !bits0 lor 0x4;
+              if not (Yojson.Safe.read_null_if_possible p lb) then (
+                field_prevNode := (
+                  Some (
+                    (
+                      read_node
+                    ) p lb
+                  )
+                );
+              )
             | _ -> (
                 Yojson.Safe.skip_json p lb
               )
@@ -1111,7 +1151,7 @@ let read_response = (
       done;
       assert false;
     with Yojson.End_of_object -> (
-        if !bits0 <> 0x7 then Ag_oj_run.missing_fields p [| !bits0 |] [| "action"; "node"; "prevNode" |];
+        if !bits0 <> 0x3 then Ag_oj_run.missing_fields p [| !bits0 |] [| "action"; "node" |];
         (
           {
             action = !field_action;
@@ -1370,16 +1410,16 @@ let error_of_string s =
   read_error (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
 let create_node 
   ~key
-  ~createIndex
+  ~createdIndex
   ~modifiedIndex
-  ~expiration
-  ~value
-  ~dir
-  ~nodes
+  ?expiration
+  ?value
+  ?dir
+  ?nodes
   () : node =
   {
     key = key;
-    createIndex = createIndex;
+    createdIndex = createdIndex;
     modifiedIndex = modifiedIndex;
     expiration = expiration;
     value = value;
@@ -1389,7 +1429,7 @@ let create_node
 let create_response 
   ~action
   ~node
-  ~prevNode
+  ?prevNode
   () : response =
   {
     action = action;
