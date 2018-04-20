@@ -1,5 +1,0 @@
-open Protocol
-       
-type result = (Response.t, Error.t) Result.result 
-val put: string -> string -> int option -> result
-                                             

@@ -1,8 +1,0 @@
-open OUnit2
-open Lwt.Infix
-       
-       
-module Client = Etcd.Client
-                  
-let writes ctx =
-  Client.create_dir ["testing"] () 
