@@ -1,0 +1,13 @@
+(jbuild_version 1)
+
+(executable
+ ((name test)
+  (libraries  (etcd oUnit rresult))))
+
+(alias
+ ((name runtest)
+  (deps (test.exe))
+  (action 
+   (progn
+    (run ${<} -runner sequential)))
+))
